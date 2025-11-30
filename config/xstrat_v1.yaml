@@ -1,0 +1,43 @@
+# XStrat V1 Configuration
+# Research-backed trading strategy with trend filter, regime detection,
+# trade frequency control, and volatility-targeted position sizing.
+
+# Layer 0: SMA200 Trend Filter
+trend_filter:
+  sma_period: 200
+  buffer_zone: 0.02  # 2% neutral zone around SMA
+
+# Layer 1: Regime Detection (ADX-based)
+regime:
+  adx_trending: 25
+  adx_ranging: 20
+  vol_multiplier: 2.0  # Volatile if vol > 2x median
+
+# Layer 2: Trade Frequency Control
+trade_limits:
+  max_per_day: 4
+  min_interval_hours: 6
+  loss_cooldown_hours: 12
+
+# Layer 3: Position Sizing
+position:
+  max_size: 0.50  # Never exceed 50%
+  vol_target: 0.02  # Target 2% daily volatility
+  confidence_threshold:
+    trending: 0.65
+    ranging: 0.80
+    volatile: 1.0  # Effectively never trade
+
+# Layer 4: Risk Management
+risk:
+  stop_loss_atr: 2.0
+  max_drawdown_halt: 0.10  # Halt at 10% drawdown
+  drawdown_recovery: 0.05  # Resume at 5% drawdown
+  execute_stops: true
+
+# Transaction Costs
+costs:
+  transaction: 0.001  # 0.1%
+  slippage: 0.0005
+  min_expected_profit: 0.003  # Only trade if expected > 0.3%
+
