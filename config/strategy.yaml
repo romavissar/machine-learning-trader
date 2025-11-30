@@ -3,11 +3,23 @@ strategy:
   asset_class: crypto
   timeframe: hourly
 
+# All exchanges support Romania and have FREE testnet/paper trading
+exchanges:
+  # Primary exchanges (Romania-friendly, free testnet available)
+  primary:
+    - binance    # testnet.binance.vision (free paper trading)
+    - bybit      # testnet.bybit.com (free paper trading)
+    - kraken     # EU regulated, available in Romania
+    - okx        # sandbox mode available (free)
+    - bitget     # demo/sandbox available (free)
+  use_testnet: true  # Set to true for paper trading (free)
+
 models:
   prediction: xgboost
   decision: ppo
-  sentiment: finbert
+  sentiment: finbert  # FREE model from Hugging Face (ProsusAI/finbert)
   arbitrage: graphsage
+  reasoning: finbert  # Options: finbert, opt, phi, mistral (all FREE, open-source)
 
 data_sources:
   - ohlcv
@@ -15,3 +27,7 @@ data_sources:
   - news_sentiment
   - technical_indicators
 
+# All APIs and models used are:
+# - FREE (at least for paper trading / testnet)
+# - Available in Romania (no geographic restrictions)
+# - Open-source ML models from Hugging Face (no paid API required)

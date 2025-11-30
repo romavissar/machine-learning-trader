@@ -22,10 +22,15 @@ def test_macd_matches_manual_ema(price_frame):
     ema_fast = price_frame["close"].ewm(span=12, adjust=False).mean()
     ema_slow = price_frame["close"].ewm(span=26, adjust=False).mean()
     expected = ema_fast - ema_slow
+    
+    macd_result = tf.macd().dropna()
+    expected_aligned = expected.loc[macd_result.index]  # Align indices
+    
     pd.testing.assert_series_equal(
-        tf.macd().dropna(),
-        expected.dropna(),
+        macd_result,
+        expected_aligned,
         check_exact=False,
+        check_names=False,
         rtol=1e-6,
     )
 

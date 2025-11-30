@@ -11,12 +11,14 @@ class Preprocessor:
         return self._align(frames).pipe(self._clean).pipe(self._normalize).pipe(self._lag)
 
     def _align(self, frames: Dict[str, pd.DataFrame]) -> pd.DataFrame:
-        base = (
-            pd.concat(frames, names=["exchange"])
-            .rename_axis("exchange")
-            .reset_index()
-            .assign(timestamp=lambda d: pd.to_datetime(d["timestamp"]))
-        )
+        # Concat with exchange as a column (pandas 2.x compatible)
+        dfs = []
+        for name, df in frames.items():
+            frame = df.copy()
+            frame["exchange"] = name
+            dfs.append(frame)
+        base = pd.concat(dfs, ignore_index=True)
+        base["timestamp"] = pd.to_datetime(base["timestamp"])
         wide = (
             base.pivot_table(index="timestamp", columns="exchange")
             .sort_index()

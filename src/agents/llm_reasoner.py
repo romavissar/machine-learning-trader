@@ -1,4 +1,8 @@
-"""LLM Reasoning Agent for market analysis and decision support."""
+"""LLM Reasoning Agent for market analysis and decision support.
+
+All models are FREE and open-source from Hugging Face - no paid API required.
+Models work globally including Romania with no geographic restrictions.
+"""
 import json
 import re
 from typing import Optional
@@ -6,19 +10,36 @@ from transformers import pipeline
 
 
 class LLMReasoningAgent:
-    """Uses LLMs to provide market reasoning and trading suggestions."""
+    """Uses LLMs to provide market reasoning and trading suggestions.
+    
+    All models are FREE open-source models from Hugging Face:
+    - finbert: Financial sentiment analysis (ProsusAI/finbert)
+    - opt: Text generation for reasoning (facebook/opt-1.3b)
+    - mistral: More capable text generation (mistralai/Mistral-7B-Instruct-v0.1)
+    - phi: Lightweight but capable (microsoft/phi-2)
+    
+    No paid APIs required. All models run locally or via free Hugging Face inference.
+    """
 
-    MODELS = {"finbert": "ProsusAI/finbert", "opt": "facebook/opt-1.3b", "gpt4": "gpt-4"}
+    # All FREE open-source models - no paid API required
+    MODELS = {
+        "finbert": "ProsusAI/finbert",           # Free sentiment model
+        "opt": "facebook/opt-1.3b",               # Free text generation
+        "phi": "microsoft/phi-2",                 # Free, lightweight, capable
+        "mistral": "mistralai/Mistral-7B-Instruct-v0.1",  # Free, more capable
+    }
 
     def __init__(self, model_choice: str = "finbert"):
         self.model_choice = model_choice
         model_id = self.MODELS.get(model_choice, self.MODELS["finbert"])
         if model_choice == "finbert":
             self.pipe = pipeline("sentiment-analysis", model=model_id)
-        elif model_choice == "opt":
+        elif model_choice in ("opt", "phi", "mistral"):
             self.pipe = pipeline("text-generation", model=model_id, max_new_tokens=128)
         else:
-            self.pipe = None  # GPT-4 requires OpenAI client
+            # Default to finbert if unknown model
+            self.pipe = pipeline("sentiment-analysis", model=self.MODELS["finbert"])
+            self.model_choice = "finbert"
 
     def analyze_market_context(self, news: list, technicals: dict, sentiment: dict) -> str:
         """Synthesize market data into actionable reasoning."""
@@ -27,7 +48,7 @@ class LLMReasoningAgent:
             results = self.pipe(news[:5] if news else ["neutral"])
             scores = [f"{r['label']}({r['score']:.2f})" for r in results]
             return f"Sentiment: {', '.join(scores)}. Technicals: {technicals}"
-        if self.model_choice == "opt":
+        if self.model_choice in ("opt", "phi", "mistral"):
             out = self.pipe(f"Market analysis:\n{prompt}\nConclusion:")[0]["generated_text"]
             return out.split("Conclusion:")[-1].strip()[:300]
         return f"Analysis pending: {prompt[:200]}"
@@ -38,11 +59,11 @@ class LLMReasoningAgent:
             result = self.pipe(context[:512])[0]
             action_map = {"positive": "BUY", "negative": "SELL", "neutral": "HOLD"}
             return {"action": action_map.get(result["label"], "HOLD"), "confidence": round(result["score"], 2)}
-        if self.model_choice == "opt":
+        if self.model_choice in ("opt", "phi", "mistral"):
             prompt = f"Position: {current_position}\nContext: {context[:256]}\nAction (BUY/SELL/HOLD) with confidence:"
             raw = self.pipe(prompt)[0]["generated_text"]
             return self._parse_action(raw)
-        return {"action": "HOLD", "confidence": 0.5, "reason": "model_unavailable"}
+        return {"action": "HOLD", "confidence": 0.5, "reason": "default_fallback"}
 
     def _parse_action(self, raw: str) -> dict:
         """Reliably parse LLM output to structured action dict."""

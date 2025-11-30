@@ -2,6 +2,21 @@
 
 > **Goal:** Build an optimal Machine Learning Trading algorithm
 
+### ✅ Romania Support & Free Paper Trading
+
+All APIs and platforms in this project:
+- **Support Romania** (EU/MiCA compliant or globally available)
+- **FREE for paper trading** (testnet/sandbox modes, no paid API required)
+- **Open-source ML models** (Hugging Face - no paid services)
+
+| Component | Provider | Romania | Free Tier |
+|-----------|----------|---------|-----------|
+| **Exchange Data** | Binance, Bybit, Kraken, OKX, Bitget | ✅ | ✅ Testnet |
+| **Sentiment Analysis** | FinBERT (Hugging Face) | ✅ | ✅ Open-source |
+| **Price Prediction** | XGBoost, LSTM (local) | ✅ | ✅ Open-source |
+| **RL Agents** | PPO, DQN (Stable-Baselines3) | ✅ | ✅ Open-source |
+| **LLM Reasoning** | Phi-2, Mistral (Hugging Face) | ✅ | ✅ Open-source |
+
 ---
 
 ## Quick Reference
@@ -38,17 +53,27 @@ strategy:
   asset_class: "crypto"     # Options: crypto | equities | forex | commodities | fixed_income
   timeframe: "hourly"       # Options: milliseconds | seconds | hourly | daily | monthly
   
+# All exchanges support Romania and have FREE testnet/paper trading
+exchanges:
+  primary:
+    - binance    # testnet.binance.vision (free)
+    - bybit      # testnet.bybit.com (free)
+    - kraken     # EU regulated
+    - okx        # sandbox available (free)
+    - bitget     # demo available (free)
+  use_testnet: true  # Enable free paper trading
+  
 models:
-  prediction: "xgboost"     # Options: xgboost | lstm | cnn | random_forest
-  decision: "ppo"           # Options: ppo | dqn | sac
-  sentiment: "finbert"      # Options: finbert | opt | gpt4
-  arbitrage: "graphsage"    # For crypto arbitrage only
+  prediction: "xgboost"     # Options: xgboost | lstm | cnn | random_forest (all free/local)
+  decision: "ppo"           # Options: ppo | dqn | sac (all free via Stable-Baselines3)
+  sentiment: "finbert"      # Options: finbert | opt | phi | mistral (all FREE from Hugging Face)
+  arbitrage: "graphsage"    # For crypto arbitrage only (free PyTorch Geometric)
 
 data_sources:
   - ohlcv                   # Candlestick data
   - order_book              # Level 2 data
-  - news_sentiment          # Financial news
-  - technical_indicators    # RSI, MACD, etc.
+  - news_sentiment          # Financial news (via free FinBERT)
+  - technical_indicators    # RSI, MACD, etc. (via free ta library)
 ```
 
 ---
@@ -102,7 +127,12 @@ data_sources:
 
 ### Crypto-Specific
 
-- **Exchanges to monitor:** KuCoin, Gate.io, Huobi, Bitget, MEXC
+- **Exchanges (Romania-friendly, free testnet):**
+  - Binance (testnet.binance.vision) - MiCA compliant in EU
+  - Bybit (testnet.bybit.com) - Global, free sandbox
+  - Kraken - EU regulated, available in Romania
+  - OKX - Global, sandbox mode available
+  - Bitget - Global, demo mode available
 - **Arbitrage model:** GraphSAGE with tokens as nodes, trades as edges
 - **DRL algos tested:** PPO, SAC, GAIL on ETH-USDT, LTC-BTC, ZEC-BTC
 
@@ -167,7 +197,7 @@ torch-geometric>=2.3.0
 | **Price Direction** | XGBoost | Random Forest |
 | **Sequence Prediction** | LSTM | CNN |
 | **Trading Decisions** | PPO | DQN, SAC |
-| **Sentiment Extraction** | FinBERT | OPT, GPT-4 |
+| **Sentiment Extraction** | FinBERT | OPT, Phi-2, Mistral (all free) |
 | **Arbitrage Detection** | GraphSAGE | - |
 
 ---

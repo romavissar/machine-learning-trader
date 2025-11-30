@@ -4,16 +4,60 @@ import ccxt.async_support as ccxt
 
 
 class DataIngestion:
-    EXCHANGES = ("kucoin", "gate", "huobi", "bitget", "mexc")
+    """Data ingestion from crypto exchanges.
+    
+    Exchanges selected for:
+    - Romania support (EU/MiCA compliant or globally available)
+    - Free testnet/sandbox for paper trading
+    - Good CCXT library support
+    
+    Testnets (free paper trading):
+    - Binance: testnet.binance.vision
+    - Bybit: testnet.bybit.com
+    - OKX: Has testnet sandbox
+    - Bitget: Has testnet sandbox
+    - Kraken: EU regulated, demo available
+    """
+    # Romania-friendly exchanges with free testnet/paper trading support
+    EXCHANGES = ("binance", "bybit", "kraken", "okx", "bitget")
+    
+    # Testnet configurations for paper trading (free)
+    TESTNET_URLS = {
+        "binance": {"urls": {"api": "https://testnet.binance.vision/api"}},
+        "bybit": {"urls": {"api": "https://api-testnet.bybit.com"}},
+        "okx": {"urls": {"api": "https://www.okx.com"}},  # OKX uses demo flag
+        "bitget": {"urls": {"api": "https://api.bitget.com"}},  # Bitget uses demo flag
+        "kraken": {},  # Kraken doesn't have public testnet, use demo credentials
+    }
+    
     TIMEFRAMES = {"ms": "1m", "seconds": "1s", "hourly": "1h", "daily": "1d", "monthly": "1M"}
 
-    def __init__(self, exchanges=None, limit=200, default_timeframe="hourly"):
+    def __init__(self, exchanges=None, limit=200, default_timeframe="hourly", use_testnet=False):
+        """Initialize data ingestion.
+        
+        Args:
+            exchanges: List of exchange IDs to use (defaults to EXCHANGES)
+            limit: Number of candles/orderbook levels to fetch
+            default_timeframe: Default OHLCV timeframe
+            use_testnet: If True, use testnet/sandbox URLs for paper trading (free)
+        """
         self.ids = exchanges or self.EXCHANGES
         self.limit = limit
         self.default_tf = self.TIMEFRAMES.get(default_timeframe, default_timeframe)
+        self.use_testnet = use_testnet
 
     def _clients(self):
-        return [getattr(ccxt, ex)() for ex in self.ids]
+        clients = []
+        for ex in self.ids:
+            client = getattr(ccxt, ex)()
+            if self.use_testnet:
+                client.set_sandbox_mode(True)
+                # Apply testnet URLs if available
+                if ex in self.TESTNET_URLS and self.TESTNET_URLS[ex]:
+                    for key, value in self.TESTNET_URLS[ex].items():
+                        setattr(client, key, value)
+            clients.append(client)
+        return clients
 
     def _df(self, exchange, rows, columns):
         df = pd.DataFrame(rows, columns=columns)

@@ -33,43 +33,89 @@ ENV/
 *.swo
 *.sublime-workspace
 *.sublime-project
+.cursor/
 
 # Jupyter Notebooks
 .ipynb_checkpoints/
 *.ipynb_checkpoints
 
-# ML artifacts & saved models
-*.pkl
-*.joblib
-*.h5
-*.pt
-*.pth
-*.onnx
+# =============================================================================
+# ML TRADING PROJECT SPECIFIC
+# =============================================================================
+
+# Trained models (can be retrained)
+models/*.joblib
+models/*.pkl
+models/*.zip
+models/*.pt
+models/*.pth
+models/*.h5
+models/*.onnx
 models/saved/
 checkpoints/
 
-# Data files
+# Data files (can be re-downloaded)
 data/*.csv
 data/*.parquet
 data/*.json
 data/*.feather
-*.csv
-*.parquet
+
+# Backtest results (can be regenerated)
+data/backtest_results.csv
+backtest_results/
+
+# Output files (can be regenerated)
+outputs/
+
+# Optuna hyperparameter optimization
+*.db
+optuna_studies/
+*.sqlite3
+
+# Hugging Face cache (models downloaded at runtime)
+.cache/
+huggingface/
+
+# TensorBoard logs
+tensorboard/
+runs/
+lightning_logs/
+
+# Stable-Baselines3 logs
+sb3_logs/
+
+# =============================================================================
+# SECRETS & CREDENTIALS
+# =============================================================================
+
+# Environment files with API keys
+.env
+.env.local
+.env.*.local
+env.template
+
+# API keys and credentials
+*.pem
+*.key
+*credentials*
+*secret*
+*api_key*
+config/*_keys.yaml
+config/*_secrets.yaml
+
+# Best hyperparameters (may contain sensitive optimization results)
+config/*_best_params.json
+
+# =============================================================================
+# GENERAL
+# =============================================================================
 
 # Logs
 *.log
 logs/
-tensorboard/
+train_*.txt
 
-# Environment variables & secrets
-.env
-.env.local
-.env.*.local
-*.pem
-*credentials*
-*secret*
-
-# OS
+# OS files
 .DS_Store
 .DS_Store?
 ._*
@@ -96,3 +142,5 @@ dmypy.json
 *.temp
 .cache/
 
+# Plan files (temporary)
+*.plan.md

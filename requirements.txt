@@ -1,24 +1,47 @@
+# MLT - Machine Learning Trader Dependencies
+# All packages are FREE and open-source
+# Works globally including Romania - no geographic restrictions
+
+# Core Data & ML (FREE, open-source)
 numpy
 pandas
 scikit-learn
+scipy
+
+# Prediction Models (FREE, local training)
 xgboost
+lightgbm
 torch
+torch-geometric
+
+# Hyperparameter Optimization (FREE)
+optuna
+
+# Reinforcement Learning (FREE, open-source)
 gymnasium
 stable-baselines3
+
+# Technical Analysis (FREE)
 ta
+
+# NLP/Sentiment - Hugging Face (FREE, open-source models)
+# Uses: FinBERT, OPT, Phi-2, Mistral - all free
 transformers
+
+# Crypto Exchange Interface (FREE for public data & testnet)
+# Supports Romania-friendly exchanges: Binance, Bybit, Kraken, OKX, Bitget
+ccxt
+
+# API & Config
+fastapi
+uvicorn
 pydantic
 pyyaml
-ccxt
-scipy
-fastapi
-uvicorn
+
+# Testing
 pytest
 pytest-asyncio
-torch-geometric
-ccxt
-scipy
-fastapi
-uvicorn
-pytest
-pytest-asyncio
+
+# Utilities
+joblib
+tqdm
