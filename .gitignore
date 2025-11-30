@@ -1,0 +1,98 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ML artifacts & saved models
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+*.onnx
+models/saved/
+checkpoints/
+
+# Data files
+data/*.csv
+data/*.parquet
+data/*.json
+data/*.feather
+*.csv
+*.parquet
+
+# Logs
+*.log
+logs/
+tensorboard/
+
+# Environment variables & secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*credentials*
+*secret*
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Misc
+*.bak
+*.tmp
+*.temp
+.cache/
+

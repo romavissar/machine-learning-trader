@@ -1,0 +1,17 @@
+strategy:
+  type: alpha_generation
+  asset_class: crypto
+  timeframe: hourly
+
+models:
+  prediction: xgboost
+  decision: ppo
+  sentiment: finbert
+  arbitrage: graphsage
+
+data_sources:
+  - ohlcv
+  - order_book
+  - news_sentiment
+  - technical_indicators
+
